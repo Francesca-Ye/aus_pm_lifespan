@@ -9,6 +9,7 @@ toc: true
 number-sections: true
 bibliography: references.bib
 ---
+# Lifespan Table for Each Australian Prime Minister
 ```{r}
 #| message: false
 #| echo: false
@@ -18,6 +19,9 @@ bibliography: references.bib
 # Load packages
 library(ggplot2)
 library(tinytex)
+library(knitr)
+library(dplyr)
+library(retroharmonize)
 
 #### Read and Write Raw Data ####
 # All code referenced from "https://tellingstorieswithdata.com/07-gather.html#prime-ministers-of-the-united-kingdom"
@@ -46,6 +50,7 @@ table_data |>
     )
 ```
 
+# Timeline Graph for Each Australian Prime Minister's Lifespan
 ```{r}
 #| warning: false
 #| message: false
