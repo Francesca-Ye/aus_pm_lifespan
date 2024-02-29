@@ -4,11 +4,14 @@ subtitle: "Week 7 tutorial"
 author: Francesca Ye
 date: today
 date-format: long
-format: html
+format: pdf
 toc: true
 number-sections: true
 bibliography: references.bib
+thanks: "Data and code can be accessed at https://github.com/Francesca-Ye/aus_pm_lifespan"
 ---
+# Lifespan Table for Each Australian Prime Minister
+
 ```{r}
 #| message: false
 #| echo: false
@@ -18,6 +21,9 @@ bibliography: references.bib
 # Load packages
 library(ggplot2)
 library(tinytex)
+library(knitr)
+library(dplyr)
+library(retroharmonize)
 
 #### Read and Write Raw Data ####
 # All code referenced from "https://tellingstorieswithdata.com/07-gather.html#prime-ministers-of-the-united-kingdom"
@@ -46,12 +52,15 @@ table_data |>
     )
 ```
 
+# Timeline Graph for Each Australian Prime Minister's Lifespan
+
 ```{r}
 #| warning: false
 #| message: false
 #| echo: false
 #| label: fig-cleaned
-#| tbl-cap: Australian Prime Ministers and their Age at Death
+#| fig-cap: Australian Prime Ministers from their Birth to Death Years
+#| fig-height: 5
 #| #| fig-pos: "H"
 
 # Code referenced from "https://tellingstorieswithdata.com/07-gather.html#prime-ministers-of-the-united-kingdom"
@@ -66,10 +75,32 @@ cleaned_data |>
     ) +
   geom_segment() +
   labs(
-    x = "Birth Year", y = "Prime Minister", color = "Living PM"
+    x = "Birth to Death Year", y = "Prime Minister", color = "Living PM"
     ) +
   theme_minimal() +
   scale_color_brewer(palette = "Set1") +
   theme(legend.position = "bottom")
+
 ```
 
+\newpage
+# Findings
+
+As seen in @tbl-cleaned, there have been 31 different Australian Prime Ministers since the office was created in 1901. 8 of the 31 prime ministers are currently alive as of February 2024. They are Paul Keating, John Howard, Kevin Rudd, Julia Gillard, Tony Abbott, Malcolm Turnbull, Scott Morrison and Anthony Albanese, the latter being the incumbent prime minister. The average lifespan of Australian prime ministers based on current data is approximately 77.9 years based on the lifespan of the 23 deceased prime ministers. As well, the median lifespan is 80 years based on the data. The modes of the lifespans of deceased Australian prime ministers are 66, 90, 84, 60, and 80. Two prime ministers for each aforementioned number have passed away at those ages.
+
+Gough Whitlamis the prime minister with the longest recorded lifespan at 93 years. He was born in 1916 and passed away in 2014. Harold Holt is the prime minister with the shortest recorded lifespan at 59 years. He was born in 1908 and passed away in 1967. George Reid is the chronologically oldest of all prime ministers as he was born in 1845. He was also the first ever Australian prime minister to pass away in 1918. The chronologically youngest of all prime ministers is Scott Morrision who was born in 1968. The most recently deceased prime minister was Bob Hawke in 2019.
+
+In @fig-cleaned, the timeline graph that shows the length of time between a prime minister’s birth and death year. From graphical interpretation, the graph highlights how Australian prime ministers are getting born later than their predecessors which has been a consistent trend throughout the graph. As well, the graph highlights the relatively long life prime ministers generally live as they are alive during the same time as multiple successors. 
+
+# Data Description and Learning
+
+The data was scraped from a Wikipedia page titled “List of prime ministers of Australia” on February 27, 2024 [@wikipedia]. Wikipedia itself uses resources to write their content, thus, the table on Wikipedia references the Australian National University’s *Australian Dictionary of Biography* and the Museum of Australian Democracy as the sources used to inform the information placed in each prime minister’s table row. A majority of the references were retrieved on September 1, 2022 [@wikipedia]. 
+
+The data gathered from the Wikipedia page to create the graph and table were the names of each Australian prime minister, their year of birth, and year of death if applicable. Data was scraped and cleaned using the statistical programming language, R [@citeR]. Code used to download and clean the data was heavily referenced from Chapter 7 of *Telling Stories with Data* [@rohan]. Using this data, the lifespan of deceased prime ministers was calculated by subtracting their year of birth from their year of death. The SelectorGadget tool [@rvest] was used to find the html element name of the table that needed to be scraped. The full html table was read and saved using the `rvest` [@rvest] and `xml2` [@xml2] packages. 
+
+To clean the data, the `janitor` [@janitor], `dplyr` [@dplyr], `tidyr` [@tidyr], `stringr` [@stringr], `retroharmonize` [@retroharmonize] and `knitr` [@knitr] packages were used. The table had all irrelevant columns rows with duplicated data removed. The content from the column rows were split into prime minister name, date, and born as a new data frame. Finally, the date column was split into birth and death to be then used to populate the lifespan column values. For living prime ministers, only their birth was recorded. After all this cleaning, a cleaned data set was created with columns featuring the prime minister's names, birth, death, and age at death values. The graph was created using `ggplot` [@ggplot2] and the paper was formatted using `tinytex` [@tinytex]
+
+Reflecting on this exercise, cleaning the data took longer than expected because the Wikipedia page for the Australian prime ministers list differed slightly from the UK prime ministers list that was used in *Telling Stories with Data*. As a result, the code did not work without changes to the logic and `if statements`. This meant taking the time to understand the code in the example and applying similar concepts to the Australian data set took a lot longer than I expected. There were some points of the data scraping that was fun. Using the SelectorGadget and looking at the different html classes was entertaining. Creating the table and graph were also fun as it did not require learning new R concepts. One thing that I would do differently next time is to refine the logic used to split the values as I personally got slightly confused when debugging. Another thing that I would do differently next time is maybe add the dates of each prime minister's time in the position to see how much of their life was spent in office. 
+
+\newpage
+# References
